@@ -199,6 +199,7 @@ class PlantCurrentStatus(RestoreSensor):
     def replace_external_sensor(self, new_sensor: str | None) -> None:
         """Modify the external sensor"""
         _LOGGER.info("Setting %s external sensor to %s", self.entity_id, new_sensor)
+
         # pylint: disable=attribute-defined-outside-init
         self._external_sensor = new_sensor
         self.async_track_entity(self.entity_id)
@@ -314,6 +315,8 @@ class PlantCurrentStatus(RestoreSensor):
         else:
             self._attr_native_value = self._default_state
 
+        self.async_write_ha_state()
+
 
 class PlantCurrentIlluminance(PlantCurrentStatus):
     """Entity class for the current illuminance meter"""
@@ -323,7 +326,7 @@ class PlantCurrentIlluminance(PlantCurrentStatus):
     ) -> None:
         """Initialize the sensor"""
         self._attr_name = (
-            f"{config.data[FLOW_PLANT_INFO][ATTR_NAME]} {READING_ILLUMINANCE}"
+            f"{config.data[FLOW_PLANT_INFO][ATTR_NAME]} Helligkeit"
         )
         self._attr_unique_id = f"{config.entry_id}-current-illuminance"
         self._attr_icon = ICON_ILLUMINANCE
@@ -348,7 +351,7 @@ class PlantCurrentConductivity(PlantCurrentStatus):
     ) -> None:
         """Initialize the sensor"""
         self._attr_name = (
-            f"{config.data[FLOW_PLANT_INFO][ATTR_NAME]} {READING_CONDUCTIVITY}"
+            f"{config.data[FLOW_PLANT_INFO][ATTR_NAME]} Leitfähigkeit"
         )
         self._attr_unique_id = f"{config.entry_id}-current-conductivity"
         self._attr_icon = ICON_CONDUCTIVITY
@@ -374,7 +377,7 @@ class PlantCurrentMoisture(PlantCurrentStatus):
     ) -> None:
         """Initialize the sensor"""
         self._attr_name = (
-            f"{config.data[FLOW_PLANT_INFO][ATTR_NAME]} {READING_MOISTURE}"
+            f"{config.data[FLOW_PLANT_INFO][ATTR_NAME]} Bodenfeuchtigkeit"
         )
         self._attr_unique_id = f"{config.entry_id}-current-moisture"
         self._external_sensor = config.data[FLOW_PLANT_INFO].get(FLOW_SENSOR_MOISTURE)
@@ -398,7 +401,7 @@ class PlantCurrentTemperature(PlantCurrentStatus):
     ) -> None:
         """Initialize the sensor"""
         self._attr_name = (
-            f"{config.data[FLOW_PLANT_INFO][ATTR_NAME]} {READING_TEMPERATURE}"
+            f"{config.data[FLOW_PLANT_INFO][ATTR_NAME]} Temperatur"
         )
         self._attr_unique_id = f"{config.entry_id}-current-temperature"
         self._external_sensor = config.data[FLOW_PLANT_INFO].get(
@@ -423,7 +426,7 @@ class PlantCurrentHumidity(PlantCurrentStatus):
     ) -> None:
         """Initialize the sensor"""
         self._attr_name = (
-            f"{config.data[FLOW_PLANT_INFO][ATTR_NAME]} {READING_HUMIDITY}"
+            f"{config.data[FLOW_PLANT_INFO][ATTR_NAME]} Luftfeuchtigkeit"
         )
         self._attr_unique_id = f"{config.entry_id}-current-humidity"
         self._external_sensor = config.data[FLOW_PLANT_INFO].get(FLOW_SENSOR_HUMIDITY)
@@ -445,7 +448,7 @@ class PlantCurrentPpfd(PlantCurrentStatus):
         self, hass: HomeAssistant, config: ConfigEntry, plantdevice: Entity
     ) -> None:
         """Initialize the sensor"""
-        self._attr_name = f"{config.data[FLOW_PLANT_INFO][ATTR_NAME]} {READING_PPFD}"
+        self._attr_name = f"{config.data[FLOW_PLANT_INFO][ATTR_NAME]} PPFD"
 
         self._attr_unique_id = f"{config.entry_id}-current-ppfd"
         self._attr_unit_of_measurement = UNIT_PPFD
@@ -536,7 +539,7 @@ class PlantTotalLightIntegral(IntegrationSensor):
         super().__init__(
             hass,
             integration_method=METHOD_TRAPEZOIDAL,
-            name=f"{config.data[FLOW_PLANT_INFO][ATTR_NAME]} Total {READING_PPFD} Integral",
+            name=f"{config.data[FLOW_PLANT_INFO][ATTR_NAME]} Gesamt-PPFD-Integral",
             round_digits=2,
             source_entity=illuminance_ppfd_sensor.entity_id,
             unique_id=f"{config.entry_id}-ppfd-integral",
@@ -590,7 +593,7 @@ class PlantDailyLightIntegral(UtilityMeterSensor):
             delta_values=None,
             meter_offset=timedelta(seconds=0),
             meter_type=DAILY,
-            name=f"{config.data[FLOW_PLANT_INFO][ATTR_NAME]} {READING_DLI}",
+            name=f"{config.data[FLOW_PLANT_INFO][ATTR_NAME]} DLI",
             net_consumption=None,
             parent_meter=config.entry_id,
             source_entity=illuminance_integration_sensor.entity_id,
@@ -655,7 +658,7 @@ class PlantDummyIlluminance(PlantDummyStatus):
     ) -> None:
         """Init the dummy sensor"""
         self._attr_name = (
-            f"Dummy {config.data[FLOW_PLANT_INFO][ATTR_NAME]} {READING_ILLUMINANCE}"
+            f"Dummy {config.data[FLOW_PLANT_INFO][ATTR_NAME]} Helligkeit"
         )
         self._attr_unique_id = f"{config.entry_id}-dummy-illuminance"
         self._attr_icon = ICON_ILLUMINANCE
@@ -687,7 +690,7 @@ class PlantDummyConductivity(PlantDummyStatus):
     ) -> None:
         """Init the dummy sensor"""
         self._attr_name = (
-            f"Dummy {config.data[FLOW_PLANT_INFO][ATTR_NAME]} {READING_CONDUCTIVITY}"
+            f"Dummy {config.data[FLOW_PLANT_INFO][ATTR_NAME]} Leitfähigkeit"
         )
         self._attr_unique_id = f"{config.entry_id}-dummy-conductivity"
         self._attr_icon = ICON_CONDUCTIVITY
@@ -714,7 +717,7 @@ class PlantDummyMoisture(PlantDummyStatus):
     ) -> None:
         """Init the dummy sensor"""
         self._attr_name = (
-            f"Dummy {config.data[FLOW_PLANT_INFO][ATTR_NAME]} {READING_MOISTURE}"
+            f"Dummy {config.data[FLOW_PLANT_INFO][ATTR_NAME]} Bodenfeuchtigkeit"
         )
         self._attr_unique_id = f"{config.entry_id}-dummy-moisture"
         self._attr_icon = ICON_MOISTURE
@@ -742,7 +745,7 @@ class PlantDummyTemperature(PlantDummyStatus):
         """Init the dummy sensor"""
 
         self._attr_name = (
-            f"Dummy {config.data[FLOW_PLANT_INFO][ATTR_NAME]} {READING_TEMPERATURE}"
+            f"Dummy {config.data[FLOW_PLANT_INFO][ATTR_NAME]} Temperatur"
         )
         self._attr_unique_id = f"{config.entry_id}-dummy-temperature"
         self._attr_icon = ICON_TEMPERATURE
@@ -753,6 +756,7 @@ class PlantDummyTemperature(PlantDummyStatus):
 
     async def async_update(self) -> int:
         """Give out a dummy value"""
+
         self._attr_native_value = random.randint(15, 20)
 
     @property
@@ -769,7 +773,7 @@ class PlantDummyHumidity(PlantDummyStatus):
     ) -> None:
         """Init the dummy sensor"""
         self._attr_name = (
-            f"Dummy {config.data[FLOW_PLANT_INFO][ATTR_NAME]} {READING_HUMIDITY}"
+            f"Dummy {config.data[FLOW_PLANT_INFO][ATTR_NAME]} Luftfeuchtigkeit"
         )
         self._attr_unique_id = f"{config.entry_id}-dummy-humidity"
         self._attr_icon = ICON_HUMIDITY
