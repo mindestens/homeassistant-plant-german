@@ -1,5 +1,5 @@
 {
-  "title": "Plant monitor",
+  "title": "Pflanzenüberwachung",
   "config": {
     "step": {
       "user": {
@@ -30,7 +30,7 @@
       },
       "limits": {
         "title": "Grenzwerte festlegen",
-        "description": "# {name}\n![Plant]({entity_picture}){br}\n{extra_desc}Temperatureinheit ist  {temperature_unit}",
+        "description": "# {name}\n![Plant]({entity_picture}){br}\n{extra_desc}Temperatureinheit ist {temperature_unit}",
         "data": {
           "right_plant": "Das ist die Pflanze, die ich gesucht habe",
           "display_pid": "Anzuzeigende Pflanzenarten",
@@ -42,8 +42,8 @@
           "min_dli": "Minimale DLI (mol/d⋅m²)",
           "max_temperature": "Maximale Temperatur (siehe oben)",
           "min_temperature": "Minimale Temperatur (siehe oben)",
-          "max_conductivity": "Maximale Leitfähigkeit (uS/cm)",
-          "min_conductivity": "Minimale Leitfähigkeit (uS/cm)",
+          "max_conductivity": "Maximale Leitfähigkeit (µS/cm)",
+          "min_conductivity": "Minimale Leitfähigkeit (µS/cm)",
           "max_humidity": "Maximale Luftfeuchtigkeit (%)",
           "min_humidity": "Minimale Luftfeuchtigkeit (%)",
           "entity_picture": "Bild-URL"
@@ -58,7 +58,7 @@
         "description": "",
         "data": {
           "check_days": "Beleuchtungsstärke-Kontrolltage",
-          "species": "Species",
+          "species": "Sorte",
           "force_update": "Aktualisierung der Daten aus OpenPlantbook erzwingen",
           "display_pid": "Anzuzeigende Pflanzenarten",
           "temperature_sensor": "Temperatursensor",
@@ -68,12 +68,99 @@
           "humidity_sensor": "Luftfeuchtigkeitssensor",
           "entity_picture": "Bild-URL. Wird automatisch aktualisiert, wenn die Art in OpenPlantbook gefunden wird",
           "illuminance_trigger": "Beleuchtungsstärke als Problemauslöser verwenden",
-          "dli_trigger": "Tägliches Lichtintegral (dli) als Problemauslöser verwenden",
+          "dli_trigger": "Tägliches Lichtintegral (DLI) als Problemauslöser verwenden",
           "humidity_trigger": "Luftfeuchtigkeit als Problemauslöser verwenden",
           "conductivity_trigger": "Leitfähigkeit als Problemauslöser verwenden",
-          "moisture_trigger": "Bodenfeuchte als Problemauslöser verwenden",
+          "moisture_trigger": "Bodenfeuchtigkeit als Problemauslöser verwenden",
           "temperature_trigger": "Temperatur als Problemauslöser verwenden"
         }
+      }
+    }
+  },
+  "services": {
+    "replace_sensor": {
+      "name": "Sensor ersetzen",
+      "description": "Ersetzt die Quelle für einen Pflanzensensor.",
+      "fields": {
+        "meter_entity": {
+          "name": "Messgerät-Entität",
+          "description": "Die Messgerät-Entität der Pflanze, für die der Sensor ersetzt werden soll."
+        },
+        "new_sensor": {
+          "name": "Sensor-Entität",
+          "description": "Entitäts-ID des neuen Sensors. Leer lassen, um den Sensor zu entfernen."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {
+        "name": "Temperatur"
+      },
+      "soil_moisture": {
+        "name": "Bodenfeuchtigkeit"
+      },
+      "conductivity": {
+        "name": "Leitfähigkeit"
+      },
+      "illuminance": {
+        "name": "Beleuchtungsstärke"
+      },
+      "air_humidity": {
+        "name": "Luftfeuchtigkeit"
+      },
+      "dli": {
+        "name": "Tägliches Lichtintegral"
+      },
+      "ppfd": {
+        "name": "PPFD"
+      }
+    },
+    "number": {
+      "min_temperature": {
+        "name": "Min. Temperatur"
+      },
+      "max_temperature": {
+        "name": "Max. Temperatur"
+      },
+      "min_moisture": {
+        "name": "Min. Bodenfeuchtigkeit"
+      },
+      "max_moisture": {
+        "name": "Max. Bodenfeuchtigkeit"
+      },
+      "min_conductivity": {
+        "name": "Min. Leitfähigkeit"
+      },
+      "max_conductivity": {
+        "name": "Max. Leitfähigkeit"
+      },
+      "min_illuminance": {
+        "name": "Min. Beleuchtungsstärke"
+      },
+      "max_illuminance": {
+        "name": "Max. Beleuchtungsstärke"
+      },
+      "min_humidity": {
+        "name": "Min. Luftfeuchtigkeit"
+      },
+      "max_humidity": {
+        "name": "Max. Luftfeuchtigkeit"
+      },
+      "min_dli": {
+        "name": "Min. DLI"
+      },
+      "max_dli": {
+        "name": "Max. DLI"
+      }
+    }
+  },
+  "entity_component": {
+    "_": {
+      "state": {
+        "problem": "Problem",
+        "ok": "OK"
       }
     }
   }
